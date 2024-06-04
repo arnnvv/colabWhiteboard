@@ -16,7 +16,7 @@ const useDraw = (
   const [mousePressed, setMousePressed] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const prevPt = useRef<PointTypee | null>(null);
+  const prevPt = useRef<Point | null>(null);
 
   const onMouseDown = () => setMousePressed(true);
 
@@ -34,7 +34,7 @@ const useDraw = (
       prevPt.current = pos;
     };
 
-    const fixPos = (e: MouseEvent): PointTypee | undefined => {
+    const fixPos = (e: MouseEvent): Point | undefined => {
       const canvas = canvasRef.current;
 
       if (!canvas) return;

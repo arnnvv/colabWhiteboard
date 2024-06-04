@@ -1,10 +1,10 @@
 type DrawingCanvas = {
   ctx: CanvasRenderingContext2D;
-  currentPos: PointTypee | null;
-  previousPos: PointTypee | null;
+  currentPos: Point;
+  previousPos: Point | null;
 };
 
-type PointTypee = {
+type Point = {
   x: number;
   y: number;
 };

@@ -1,7 +1,6 @@
 import {
   MouseEvent,
   MutableRefObject,
-  RefObject,
   useEffect,
   useRef,
   useState,
@@ -12,6 +11,7 @@ const useDraw = (
 ): {
   canvasRef: MutableRefObject<HTMLCanvasElement | null>;
   onMouseDown: () => void;
+  clear: () => void;
 } => {
   const [mousePressed, setMousePressed] = useState<boolean>(false);
 
@@ -19,6 +19,14 @@ const useDraw = (
   const prevPt = useRef<Point | null>(null);
 
   const onMouseDown = () => setMousePressed(true);
+
+  const clear = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    ctx?.clearRect(0, 0, canvas.width, canvas.height);
+  };
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -52,7 +60,7 @@ const useDraw = (
     return () => canvasRef.current?.removeEventListener("mousemove", handler);
   }, [draw, mousePressed]);
 
-  return { canvasRef, onMouseDown };
+  return { canvasRef, onMouseDown, clear };
 };
 
 export default useDraw;

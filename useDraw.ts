@@ -1,10 +1,4 @@
-import {
-  MouseEvent,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 const useDraw = (
   draw: ({ ctx, currentPos, previousPos }: DrawingCanvas) => void,
@@ -37,7 +31,6 @@ const useDraw = (
 
       if (!ctx || !pos) return;
 
-      console.log({ x: e.clientX, y: e.clientY });
       draw({ ctx, currentPos: pos, previousPos: prevPt.current });
       prevPt.current = pos;
     };

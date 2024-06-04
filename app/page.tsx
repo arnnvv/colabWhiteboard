@@ -1,11 +1,9 @@
 "use client";
 
 import useDraw from "@/useDraw";
-import { useState } from "react";
-import { ChromePicker, ColorResult } from "react-color";
 
 export default function Home(): JSX.Element {
-  const [color, setColor] = useState<string>("#000");
+  const color: string = "#000";
 
   const drawLine = ({ ctx, currentPos, previousPos }: DrawingCanvas) => {
     const { x: currentX, y: currentY } = currentPos;
@@ -30,10 +28,6 @@ export default function Home(): JSX.Element {
   return (
     <div className="w-screen h-screen bg-white flex justify-center items-center">
       <div className="flex flex-col gap-10 pr-10">
-        <ChromePicker
-          color={color}
-          onChange={(e: ColorResult) => setColor(e.hex)}
-        />
         <button
           type="button"
           className="p-2 rounded-md border border-black text-sky-300"

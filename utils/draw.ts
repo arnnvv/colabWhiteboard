@@ -1,28 +1,26 @@
-type DrawLineProps = DrawingCanvas & {
-  color: string;
-};
-
 const drawLine = ({
+  previousPoint,
+  currentPoint,
   ctx,
-  currentPos,
-  previousPos,
   color,
-}: DrawLineProps): void => {
-  const { x: currentX, y: currentY } = currentPos;
+}: DrawCanvasProps & {
+  color: string;
+}): void => {
+  const { x: currX, y: currY } = currentPoint;
+  const lineColor = color;
   const lineWidth = 5;
 
-  let stPt = previousPos ?? currentPos;
-
+  let startPoint = previousPoint ?? currentPoint;
   ctx.beginPath();
   ctx.lineWidth = lineWidth;
-  ctx.strokeStyle = color;
-  ctx.moveTo(stPt.x, stPt.y);
-  ctx.lineTo(currentX, currentY);
+  ctx.strokeStyle = lineColor;
+  ctx.moveTo(startPoint.x, startPoint.y);
+  ctx.lineTo(currX, currY);
   ctx.stroke();
 
-  ctx.fillStyle = color;
+  ctx.fillStyle = lineColor;
   ctx.beginPath();
-  ctx.arc(stPt.x, stPt.y, 2, 0, 2 * Math.PI);
+  ctx.arc(startPoint.x, startPoint.y, 2, 0, 2 * Math.PI);
   ctx.fill();
 };
 

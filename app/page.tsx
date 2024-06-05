@@ -2,12 +2,24 @@
 
 import useDraw from "@/useDraw";
 import drawLine from "@/utils/draw";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:8080");
 
 export default function Home(): JSX.Element {
   const color: string = "#000";
 
-  const createLine = ({ ctx, currentPos, previousPos }: DrawingCanvas) => {
-    drawLine({ ctx, currentPos, previousPos, color });
+  const createLine = ({
+    previousPoint,
+    currentPoint,
+    ctx,
+  }: DrawCanvasProps): void => {
+    socket.emit("draw-line", {
+      previousPoint,
+      currentPoint,
+      color,
+    });
+    drawLine({ previousPoint, currentPoint, ctx, color });
   };
 
   const { canvasRef, onMouseDown, clear } = useDraw(createLine);

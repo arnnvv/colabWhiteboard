@@ -1,7 +1,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 const useDraw = (
-  draw: ({ ctx, currentPos, previousPos }: DrawingCanvas) => void,
+  draw: ({ previousPoint, currentPoint, ctx }: DrawCanvasProps) => void,
 ): {
   canvasRef: MutableRefObject<HTMLCanvasElement | null>;
   onMouseDown: () => void;
@@ -31,7 +31,7 @@ const useDraw = (
 
       if (!ctx || !pos) return;
 
-      draw({ ctx, currentPos: pos, previousPos: prevPt.current });
+      draw({ ctx, currentPoint: pos, previousPoint: prevPt.current });
       prevPt.current = pos;
     };
 

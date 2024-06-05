@@ -2,27 +2,43 @@
 
 import useDraw from "@/useDraw";
 import drawLine from "@/utils/draw";
+import { useEffect } from "react";
 import { io } from "socket.io-client";
 
 const socket = io("http://localhost:8080");
 
 export default function Home(): JSX.Element {
+  const { canvasRef, onMouseDown, clear } = useDraw(createLine);
   const color: string = "#000";
 
-  const createLine = ({
+  useEffect(() => {
+    const ctx = canvasRef.current?.getContext("2d");
+    socket.on(
+      "draw-line",
+      ({ previousPoint, currentPoint, color }: DrawLineProps): void => {
+        if (!ctx) return;
+        drawLine({
+          previousPoint,
+          currentPoint,
+          ctx,
+          color,
+        });
+      },
+    );
+  }, [canvasRef]);
+
+  function createLine({
     previousPoint,
     currentPoint,
     ctx,
-  }: DrawCanvasProps): void => {
+  }: DrawCanvasProps): void {
     socket.emit("draw-line", {
       previousPoint,
       currentPoint,
       color,
     });
     drawLine({ previousPoint, currentPoint, ctx, color });
-  };
-
-  const { canvasRef, onMouseDown, clear } = useDraw(createLine);
+  }
 
   return (
     <div className="w-screen h-screen bg-white flex justify-center items-center">

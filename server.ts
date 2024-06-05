@@ -24,6 +24,8 @@ io.on("connection", (socket) => {
       });
     },
   );
+
+  socket.on("clear", (): boolean => io.emit("clear"));
 });
 
 server.listen(port, () => {

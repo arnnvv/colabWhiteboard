@@ -8,8 +8,22 @@ import { io } from "socket.io-client";
 const socket = io("http://localhost:8080");
 
 export default function Home(): JSX.Element {
-  const { canvasRef, onMouseDown, clear } = useDraw(createLine);
   const color: string = "#000";
+
+  const createLine = ({
+    previousPoint,
+    currentPoint,
+    ctx,
+  }: DrawCanvasProps): void => {
+    socket.emit("draw-line", {
+      previousPoint,
+      currentPoint,
+      color,
+    });
+    drawLine({ previousPoint, currentPoint, ctx, color });
+  };
+
+  const { canvasRef, onMouseDown, clear } = useDraw(createLine);
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
@@ -25,20 +39,9 @@ export default function Home(): JSX.Element {
         });
       },
     );
-  }, [canvasRef]);
 
-  function createLine({
-    previousPoint,
-    currentPoint,
-    ctx,
-  }: DrawCanvasProps): void {
-    socket.emit("draw-line", {
-      previousPoint,
-      currentPoint,
-      color,
-    });
-    drawLine({ previousPoint, currentPoint, ctx, color });
-  }
+    socket.on("clear", clear);
+  }, [canvasRef, clear]);
 
   return (
     <div className="w-screen h-screen bg-white flex justify-center items-center">
@@ -46,7 +49,7 @@ export default function Home(): JSX.Element {
         <button
           type="button"
           className="p-2 rounded-md border border-black text-sky-300"
-          onClick={clear}
+          onClick={() => socket.emit("clear")}
         >
           Clear
         </button>

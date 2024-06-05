@@ -1,29 +1,16 @@
 "use client";
 
 import useDraw from "@/useDraw";
+import drawLine from "@/utils/draw";
 
 export default function Home(): JSX.Element {
   const color: string = "#000";
 
-  const drawLine = ({ ctx, currentPos, previousPos }: DrawingCanvas) => {
-    const { x: currentX, y: currentY } = currentPos;
-    const lineWidth = 5;
-
-    let stPt = previousPos ?? currentPos;
-    ctx.beginPath();
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = color;
-    ctx.moveTo(stPt.x, stPt.y);
-    ctx.lineTo(currentX, currentY);
-    ctx.stroke();
-
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(stPt.x, stPt.y, 2, 0, 2 * Math.PI);
-    ctx.fill();
+  const createLine = ({ ctx, currentPos, previousPos }: DrawingCanvas) => {
+    drawLine({ ctx, currentPos, previousPos, color });
   };
 
-  const { canvasRef, onMouseDown, clear } = useDraw(drawLine);
+  const { canvasRef, onMouseDown, clear } = useDraw(createLine);
 
   return (
     <div className="w-screen h-screen bg-white flex justify-center items-center">

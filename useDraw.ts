@@ -22,8 +22,8 @@ const useDraw = (
     ctx?.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
+  useEffect((): (() => void | undefined) => {
+    const handler = (e: MouseEvent): void => {
       if (!mousePressed) return;
 
       const pos = fixPos(e);
@@ -50,7 +50,8 @@ const useDraw = (
     canvasRef.current?.addEventListener("mousemove", handler);
     window.addEventListener("mouseup", () => setMousePressed(false));
 
-    return () => canvasRef.current?.removeEventListener("mousemove", handler);
+    return (): void | undefined =>
+      canvasRef.current?.removeEventListener("mousemove", handler);
   }, [draw, mousePressed]);
 
   return { canvasRef, onMouseDown, clear };

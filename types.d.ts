@@ -8,3 +8,8 @@ type Point = {
   x: number;
   y: number;
 };
+type DrawLineProps = {
+  prevPoint: Point | null;
+  currentPoint: Point;
+  color: string;
+};

@@ -27,6 +27,22 @@ export default function Home(): JSX.Element {
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
+
+    socket.emit("client-ready");
+
+    socket.on("get-canvas", () => {
+      if (!canvasRef.current?.toDataURL()) return;
+      socket.emit("canvas-state", canvasRef.current.toDataURL());
+    });
+
+    socket.on("canvas-state-from-server", (state: string) => {
+      const img = new Image();
+      img.src = state;
+      img.onload = () => {
+        ctx?.drawImage(img, 0, 0);
+      };
+    });
+
     socket.on(
       "draw-line",
       ({ previousPoint, currentPoint, color }: DrawLineProps): void => {
@@ -41,6 +57,13 @@ export default function Home(): JSX.Element {
     );
 
     socket.on("clear", clear);
+
+    return () => {
+      socket.off("draw-line");
+      socket.off("clear");
+      socket.off("get-canvas");
+      socket.off("canvas-state-from-server");
+    };
   }, [canvasRef, clear]);
 
   return (

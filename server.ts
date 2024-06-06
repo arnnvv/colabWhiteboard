@@ -13,7 +13,14 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  socket.on("client-ready", () => {
+    socket.broadcast.emit("get-canvas");
+  });
+
+  socket.on("canvas-state", (state: string) => {
+    socket.broadcast.emit("canvas-state-from-server", state);
+  });
+
   socket.on(
     "draw-line",
     ({ previousPoint, currentPoint, color }: DrawLineProps): void => {
